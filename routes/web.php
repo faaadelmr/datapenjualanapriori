@@ -31,6 +31,9 @@ Route::middleware(['auth'])->group(function () {
     
     // PDF route
     Route::get('/sales/{sale}/pdf', [App\Http\Controllers\SalePdfController::class, 'generatePdf'])->name('sales.pdf');
+
+    // Apriori Analysis route
+    Route::get('/apriori', App\Livewire\Apriori\Index::class)->name('apriori.index');
 });
 
 require __DIR__.'/auth.php';

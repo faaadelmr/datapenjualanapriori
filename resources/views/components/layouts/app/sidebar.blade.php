@@ -21,6 +21,9 @@
                 <flux:navlist.item href="{{ route('sales.index') }}" :active="request()->routeIs('sales.*')">
                 {{ __('Sales') }}
             </flux:navlist.item>
+            <flux:navlist.item href="{{ route('apriori.index') }}" :active="request()->routeIs('apriori.*')">
+                {{ __('Apriori Analysis') }}
+            </flux:navlist.item>
             </flux:navlist>
 
             <flux:spacer />

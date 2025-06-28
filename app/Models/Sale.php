@@ -26,8 +26,31 @@ class Sale extends Model
 
     public static function generateInvoiceNumber()
     {
-        $lastSale = self::latest()->first();
-        $lastNumber = $lastSale ? intval(substr($lastSale->invoice_number, 4)) : 0;
-        return 'INV-' . str_pad($lastNumber + 1, 6, '0', STR_PAD_LEFT);
+        // Get the latest invoice number
+        $latestInvoice = self::orderBy('id', 'desc')->first();
+        
+        // If no invoice exists, start with INV-000001
+        if (!$latestInvoice) {
+            return 'INV-000001';
+        }
+        
+        // Extract the numeric part of the latest invoice number
+        $latestNumber = (int) substr($latestInvoice->invoice_number, 4);
+        
+        // Increment the number and format it with leading zeros
+        $newNumber = $latestNumber + 1;
+        $formattedNumber = str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+        
+        // Generate the new invoice number
+        $newInvoiceNumber = 'INV-' . $formattedNumber;
+        
+        // Check if the generated invoice number already exists (to be extra safe)
+        while (self::where('invoice_number', $newInvoiceNumber)->exists()) {
+            $newNumber++;
+            $formattedNumber = str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+            $newInvoiceNumber = 'INV-' . $formattedNumber;
+        }
+        
+        return $newInvoiceNumber;
     }
 }
