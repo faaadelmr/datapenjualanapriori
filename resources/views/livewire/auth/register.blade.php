@@ -35,11 +35,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 }; ?>
 
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+<div class="flex flex-col gap-6 p-8 rounded-xl shadow-2xl bg-gradient-to-br from-blue-900 via-indigo-800 to-blue-700 text-white border border-blue-600 backdrop-blur-md">
+    <x-auth-header 
+        :title="__('Create an account')" 
+        :description="__('Enter your details below to create your account')" 
+        class="text-zinc-800 dark:text-white"
+    />
 
     <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
+    <x-auth-session-status class="text-center text-green-500" :status="session('status')" />
 
     <form wire:submit="register" class="flex flex-col gap-6">
         <!-- Name -->
@@ -51,9 +55,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autofocus
             autocomplete="name"
             :placeholder="__('Full name')"
+            class="rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-inner focus:ring-4 focus:ring-blue-400 dark:focus:ring-blue-600 transition-all"
         />
 
-        <!-- Email Address -->
+        <!-- Email -->
         <flux:input
             wire:model="email"
             :label="__('Email address')"
@@ -61,6 +66,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             required
             autocomplete="email"
             placeholder="email@example.com"
+            class="rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-inner focus:ring-4 focus:ring-indigo-400 dark:focus:ring-indigo-600 transition-all"
         />
 
         <!-- Password -->
@@ -72,6 +78,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autocomplete="new-password"
             :placeholder="__('Password')"
             viewable
+            class="rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-inner focus:ring-4 focus:ring-purple-400 dark:focus:ring-purple-600 transition-all"
         />
 
         <!-- Confirm Password -->
@@ -83,17 +90,29 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autocomplete="new-password"
             :placeholder="__('Confirm password')"
             viewable
+            class="rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-inner focus:ring-4 focus:ring-purple-400 dark:focus:ring-purple-600 transition-all"
         />
 
         <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
+            <flux:button 
+                type="submit" 
+                variant="primary" 
+                class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all"
+            >
                 {{ __('Create account') }}
             </flux:button>
         </div>
     </form>
 
-    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
+    <div class="text-center text-sm text-zinc-600 dark:text-zinc-400">
         {{ __('Already have an account?') }}
-        <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+        <flux:link 
+            :href="route('login')" 
+            wire:navigate 
+            class="text-blue-500 hover:underline hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-all"
+        >
+            {{ __('Log in') }}
+        </flux:link>
     </div>
 </div>
+
