@@ -12,6 +12,8 @@ class Create extends Component
     public $sale_date;
     public $items = [];
     public $total_amount = 0;
+    public $productSearch = '';
+    private $productNameCache = [];
 
     protected $rules = [
         'sale_date' => 'required|date',
@@ -27,8 +29,15 @@ class Create extends Component
 
     public function render()
     {
-        $products = Product::where('quantity', '>', 0)->get();
-        
+        $productsQuery = Product::where('quantity', '>', 0);
+
+        if (!empty($this->productSearch)) {
+            $productsQuery->where('name', 'like', '%' . $this->productSearch . '%');
+        }
+
+        // Limit results for performance
+        $products = $productsQuery->limit(15)->get();
+
         return view('livewire.sales.create', [
             'products' => $products,
         ]);
@@ -51,25 +60,34 @@ class Create extends Component
         $this->calculateTotal();
     }
 
+    public function selectProduct($index, $productId)
+    {
+        $product = Product::find($productId);
+        if ($product) {
+            $this->items[$index]['product_id'] = $product->id;
+            $this->items[$index]['unit_price'] = $product->price;
+            $this->calculateItemTotal($index);
+            $this->calculateTotal();
+            $this->productSearch = '';
+            $this->resetValidation('items.' . $index . '.product_id');
+        }
+    }
+
     public function updatedItems($value, $key)
     {
         $parts = explode('.', $key);
         $index = $parts[0];
         $field = $parts[1];
 
-        if ($field === 'product_id' && $value) {
-            $product = Product::find($value);
-            if ($product) {
-                $this->items[$index]['unit_price'] = $product->price;
-                $this->calculateItemTotal($index);
-            }
-        }
-
+        // Product selection is now handled by selectProduct()
         if ($field === 'quantity') {
+            // Ensure quantity is not less than 1
+            if ($this->items[$index]['quantity'] < 1) {
+                $this->items[$index]['quantity'] = 1;
+            }
             $this->calculateItemTotal($index);
+            $this->calculateTotal();
         }
-
-        $this->calculateTotal();
     }
 
     public function calculateItemTotal($index)
@@ -82,6 +100,22 @@ class Create extends Component
     public function calculateTotal()
     {
         $this->total_amount = collect($this->items)->sum('total_price');
+    }
+
+    public function getProductName($productId)
+    {
+        if (!$productId) {
+            return 'Select Product';
+        }
+
+        if (isset($this->productNameCache[$productId])) {
+            return $this->productNameCache[$productId];
+        }
+
+        $product = Product::find($productId);
+        $this->productNameCache[$productId] = $product ? $product->name : 'Product not found';
+
+        return $this->productNameCache[$productId];
     }
 
     public function store()
