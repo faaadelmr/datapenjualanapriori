@@ -20,65 +20,77 @@ class SaleSeeder extends Seeder
         
         // Definisikan pola pembelian untuk testing Apriori
         $purchasePatterns = [
-            // Pattern 1: Makanan Ringan + Minuman (Sering dibeli bersamaan)
+            // Pattern 1: Makanan Ringan + Minuman ringan
             [
                 'products' => ['Chitato Rasa Sapi Panggang', 'Aqua Botol 600ml'],
-                'frequency' => 80, // 80% kemungkinan dibeli bersamaan
-                'transactions' => 200
+                'frequency' => 82,
+                'transactions' => 250
             ],
-            // Pattern 2: Mie Instan + Minuman
+            // Pattern 2: Mie Instan + Minuman bersoda
             [
                 'products' => ['Indomie Goreng Original', 'Coca Cola Kaleng 330ml'],
-                'frequency' => 75,
-                'transactions' => 180
+                'frequency' => 78,
+                'transactions' => 210
             ],
-            // Pattern 3: Susu + Roti
+            // Pattern 3: Susu bubuk + Roti Tawar
             [
                 'products' => ['Susu Dancow Fortigro', 'Roti Tawar Sari Roti'],
-                'frequency' => 70,
-                'transactions' => 150
+                'frequency' => 72,
+                'transactions' => 180
             ],
-            // Pattern 4: Bumbu Masak
+            // Pattern 4: Bumbu dapur lengkap
             [
                 'products' => ['Royco Rasa Ayam', 'Minyak Goreng Bimoli 2L', 'Garam Dapur Cap Kapal'],
-                'frequency' => 60,
-                'transactions' => 120
+                'frequency' => 65,
+                'transactions' => 140
             ],
-            // Pattern 5: Perawatan Pribadi
+            // Pattern 5: Perawatan Pribadi Harian
             [
                 'products' => ['Sabun Mandi Lifebuoy', 'Shampo Pantene 170ml', 'Pasta Gigi Pepsodent'],
-                'frequency' => 65,
-                'transactions' => 100
+                'frequency' => 68,
+                'transactions' => 120
             ],
-            // Pattern 6: Snack + Minuman
+            // Pattern 6: Snack Manis + Teh
             [
                 'products' => ['Richeese Nabati Keju', 'Teh Botol Sosro 450ml'],
-                'frequency' => 85,
-                'transactions' => 160
+                'frequency' => 87,
+                'transactions' => 200
             ],
-            // Pattern 7: Es Krim + Minuman
+            // Pattern 7: Es Krim + Minuman kaleng
             [
                 'products' => ['Es Krim Walls Cornetto', 'Fanta Orange Kaleng'],
-                'frequency' => 90,
-                'transactions' => 80
+                'frequency' => 88,
+                'transactions' => 100
             ],
-            // Pattern 8: Rokok + Minuman
+            // Pattern 8: Rokok + Minuman bersoda
             [
                 'products' => ['Gudang Garam Surya 12', 'Coca Cola Kaleng 330ml'],
-                'frequency' => 80,
-                'transactions' => 90
-            ],
-            // Pattern 9: Biskuit + Susu
-            [
-                'products' => ['Oreo Original', 'Ultra Milk Coklat 250ml'],
-                'frequency' => 70,
+                'frequency' => 83,
                 'transactions' => 110
             ],
-            // Pattern 10: Pembersih Rumah
+            // Pattern 9: Biskuit manis + Susu kemasan
+            [
+                'products' => ['Oreo Original', 'Ultra Milk Coklat 250ml'],
+                'frequency' => 74,
+                'transactions' => 130
+            ],
+            // Pattern 10: Pembersih Rumah Tangga
             [
                 'products' => ['Sabun Cuci Piring Sunlight', 'Deterjen Rinso Matic'],
-                'frequency' => 75,
-                'transactions' => 95
+                'frequency' => 77,
+                'transactions' => 105
+            ],
+            // Pattern 11: Sarapan Sehat
+            [
+                'products' => ['Nutri Sari Jeruk', 'Telur Ayam 1kg', 'Roti Gandum Utuh'],
+                'frequency' => 70,
+                'transactions' => 90
+            ],
+            // Pattern 12: Snack Coklat + Minuman Energi
+            [
+                'products' => ['JetZ Coklat', 'Pocari Sweat 350ml'],
+                'frequency' => 76,
+                'transactions' => 85
             ]
         ];
 
@@ -135,7 +147,7 @@ class SaleSeeder extends Seeder
         }
 
         // Buat transaksi random untuk variasi (20% dari total transaksi)
-        $randomTransactions = 200;
+        $randomTransactions = 900;
         for ($i = 0; $i < $randomTransactions; $i++) {
             $sale = Sale::create([
                 'invoice_number' => 'INV-' . str_pad($invoiceNumber++, 6, '0', STR_PAD_LEFT),
@@ -177,22 +189,53 @@ class SaleSeeder extends Seeder
             // Transaksi dengan banyak item (untuk testing itemset besar)
             [
                 'products' => [
-                    'Indomie Goreng Original', 'Aqua Botol 600ml', 'Chitato Rasa Sapi Panggang',
-                    'Teh Botol Sosro 450ml', 'Richeese Nabati Keju'
+                    'Indomie Goreng Original',
+                    'Aqua Botol 600ml',
+                    'Chitato Rasa Sapi Panggang',
+                    'Teh Botol Sosro 450ml',
+                    'Richeese Nabati Keju',
+                    'Yakult Original 5 Pack',
+                    'Good Day Cappuccino',
+                    'Pilus Garuda Original',
+                    'Cheetos Jagung Bakar',
+                    'Qtela Singkong Balado',
                 ],
-                'count' => 50
+                'count' => 350
             ],
-            // Transaksi dengan produk mahal
+            // Pola campuran minuman dan makanan ringan
             [
-                'products' => ['Susu Dancow Fortigro', 'Roti Tawar Sari Roti', 'Keju Kraft Singles'],
-                'count' => 30
+                'products' => [
+                    'Sprite Kaleng 330ml',
+                    'Lays Potato Chips Original',
+                    'Ring Pomo Jagung Bakar',
+                    'Floridina Orange',
+                    'JetZ Coklat',
+                ],
+                'count' => 435
             ],
-            // Transaksi dengan produk murah
+            // Pola belanja dapur dan mie instan
             [
-                'products' => ['Royco Rasa Ayam', 'Garam Dapur Cap Kapal', 'Gula Pasir Gulaku 1kg'],
-                'count' => 40
+                'products' => [
+                    'Indomie Ayam Geprek',
+                    'Cabe Rawit 250gr',
+                    'Bawang Merah 500gr',
+                    'Santan Kara 65ml',
+                    'Tomat 500gr',
+                ],
+                'count' => 340
+            ],
+            // Pola susu & sarapan
+            [
+                'products' => [
+                    'Susu Ultra Milk Full Cream 1L',
+                    'Keju Kraft Singles',
+                    'Roti Tawar Sari Roti',
+                    'Wafer Tango Coklat',
+                    'Nutri Sari Jeruk',
+                ],
+                'count' => 425
             ]
-        ];
+        ];        
 
         foreach ($specialPatterns as $pattern) {
             for ($i = 0; $i < $pattern['count']; $i++) {
